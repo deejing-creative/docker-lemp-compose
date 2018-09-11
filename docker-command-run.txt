@@ -1,0 +1,10 @@
+﻿docker run --name mysql-server -v /var/mysql/data:/var/lib/mysql -v /var/mysql/config.d:/etc/mysql/conf.d -e MYSQL_ROOT_PASSWORD=5YEuYhtjgneKhp3JzNftoa26I7Hlh9 --restart=always -d -p 3306:3306 mysql:8.0
+
+docker run --name myadmin -d --link mysql-server:db -p 8080:80 phpmyadmin/phpmyadmin
+docker run -d -p 9000:9000 --name php-7-fpm -v /var/www:/var/www/html --restart=always php:7-fpm
+
+docker run --name nginx-server  -v  /var/www:/usr/share/nginx/html:ro -v /var/nginx/conf/nginx.conf:/etc/nginx/conf/nginx.conf:ro -v /var/nginx/conf.d:/etc/nginx/conf.d:ro -P -p 80:80 -p 443:443 -d  --link php-7-fpm:php --restart=always nginx:alpine
+
+docker run --name nginx-server  -v  /var/www:/usr/share/nginx/html:ro  -P -p 80:80 -p 443:443 -d  --link php-7-fpm:php --restart=always nginx:alpine
+
+
